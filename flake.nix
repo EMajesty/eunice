@@ -10,6 +10,7 @@
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
+      armToolchain = pkgs.gcc-arm-embedded;
     in
     {
       devShells.${system}.default = pkgs.mkShell {
@@ -39,6 +40,11 @@
           # ARM bare-metal compiler
           gcc-arm-embedded
         ];
+
+        env = {
+          ZEPHYR_TOOLCHAIN_VARIANT = "gnuarmemb";
+          GNUARMEMB_TOOLCHAIN_PATH = "${armToolchain}";
+        };
 
         shellHook = ''
           echo "Eunice firmware environment"

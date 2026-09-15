@@ -1,0 +1,1 @@
+"mcuboot":"/home/emaj/git/eunice/zephyr-workspace/bootloader/mcuboot":"/home/emaj/git/eunice/zephyr-workspace/bootloader/mcuboot/boot/zephyr/sysbuild"

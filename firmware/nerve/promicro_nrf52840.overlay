@@ -1,0 +1,13 @@
+/ {
+buttons {
+compatible = "gpio-keys";
+
+nerve_button: nerve_button {
+gpios = <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+label = "Nerve Button";
+};
+};
+aliases {
+nerve-button = &nerve_button;
+};
+};

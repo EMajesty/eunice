@@ -1,0 +1,36 @@
+# Available runners configured by board.cmake.
+runners:
+- uf2
+- jlink
+- pyocd
+
+# Default flash runner if --runner is not given.
+flash-runner: uf2
+
+# Default debug runner if --runner is not given.
+debug-runner: jlink
+
+# Common runner configuration values.
+config:
+  board_dir: /home/emaj/git/eunice/zephyr-workspace/zephyr/boards/others/promicro_nrf52840
+  # Build outputs:
+  elf_file: zephyr.elf
+  hex_file: zephyr.hex
+  bin_file: zephyr.bin
+  uf2_file: zephyr.uf2
+  # Host tools:
+  gdb: /nix/store/8im8fi1g72flhxjqarv43ykdcdjcl5sw-gcc-arm-embedded-15.3.rel1/bin/arm-none-eabi-gdb
+
+# Runner specific arguments
+args:
+  uf2:
+    []
+
+  jlink:
+    - --dt-flash=y
+    - --device=nRF52840_xxAA
+    - --speed=4000
+  pyocd:
+    - --dt-flash=y
+    - --target=nrf52840
+    - --frequency=4000000

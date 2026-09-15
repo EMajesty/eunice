@@ -1,0 +1,65 @@
+cmake:
+  application:
+    configuration-dir: '/home/emaj/git/eunice/firmware/nerve'
+    source-dir: '/home/emaj/git/eunice/firmware/nerve'
+  board:
+    name: 'promicro_nrf52840'
+    path:
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/boards/others/promicro_nrf52840'
+    qualifiers: 'nrf52840/uf2'
+    revision: ''
+  devicetree:
+    bindings-dirs:
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/bindings'
+    files:
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/boards/others/promicro_nrf52840/promicro_nrf52840_nrf52840_uf2.dts'
+     - '/home/emaj/git/eunice/firmware/nerve/promicro_nrf52840.overlay'
+    include-dirs:
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/ambiq/dts'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/atmel/include'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/bouffalolab/include'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/bouffalolab/include/zephyr'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/gigadevice/include'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/infineon/dts'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/microchip/include'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/microchip/dts'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/nuvoton/dts'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/nxp/dts'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/stm32/dts'
+     - '/home/emaj/git/eunice/zephyr-workspace/modules/hal/ti/dts'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/include'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/include/zephyr'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/common'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/vendor'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/rx'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/x86'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/xtensa'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/sparc'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/riscv'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/posix'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/arm64'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/arm'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts/arc'
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/dts'
+    user-files:
+     - '/home/emaj/git/eunice/firmware/nerve/promicro_nrf52840.overlay'
+  kconfig:
+    files:
+     - '/home/emaj/git/eunice/zephyr-workspace/zephyr/boards/others/promicro_nrf52840/promicro_nrf52840_nrf52840_uf2_defconfig'
+     - '/home/emaj/git/eunice/firmware/nerve/prj.conf'
+    user-files:
+     - '/home/emaj/git/eunice/firmware/nerve/prj.conf'
+  toolchain:
+    name: 'gnuarmemb'
+    path: '/nix/store/8im8fi1g72flhxjqarv43ykdcdjcl5sw-gcc-arm-embedded-15.3.rel1'
+  vendor-specific:
+    nordic:
+      svdfile: '/home/emaj/git/eunice/zephyr-workspace/modules/hal/nordic/nrfx/bsp/stable/mdk/nrf52/nrf52840/nrf52840.svd'
+  zephyr:
+    version: '4.4.99'
+    zephyr-base: '/home/emaj/git/eunice/zephyr-workspace/zephyr'
+version: '0.1.0'
+west:
+  command: '/home/emaj/git/eunice/zephyr-workspace/.venv/bin/west build -p always -b promicro_nrf52840/nrf52840/uf2 /home/emaj/git/eunice/firmware/nerve -- -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DDTC_OVERLAY_FILE=/home/emaj/git/eunice/firmware/nerve/promicro_nrf52840.overlay'
+  topdir: '/home/emaj/git/eunice/zephyr-workspace'
+  version: '1.5.0'
