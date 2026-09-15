@@ -1,2 +1,0 @@
-# Load Zephyr board defconfig descriptions.
-osource "/home/emaj/git/eunice/zephyr-workspace/zephyr/boards/others/promicro_nrf52840/Kconfig.defconfig"
