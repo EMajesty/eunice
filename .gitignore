@@ -1,2 +1,37 @@
+# Nix / direnv
 .direnv/
-zephyr-workspace/.venv/
+result
+result-*
+
+# Python virtual environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Zephyr build output
+build/
+**/build/
+compile_commands.json
+
+# West / Zephyr workspace metadata
+.west/
+
+# Editor / language tooling
+.clangd/
+.cache/
+*.swp
+*.swo
+*~
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Local logs / captures
+*.log
+
+# Secrets / local configuration
+.env
+.env.*
+!.env.example
