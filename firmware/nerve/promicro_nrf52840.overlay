@@ -2,12 +2,37 @@
 buttons {
 compatible = "gpio-keys";
 
-nerve_button: nerve_button {
+nerve_button1: nerve_button1 {
+gpios = <&gpio0 31 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+label = "Nerve Button 1";
+};
+
+nerve_button2: nerve_button2 {
+gpios = <&gpio1 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+label = "Nerve Button 2";
+};
+
+nerve_button3: nerve_button3 {
+gpios = <&gpio1 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+label = "Nerve Button 3";
+};
+
+nerve_button4: nerve_button4 {
+gpios = <&gpio0 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+label = "Nerve Button 4";
+};
+
+nerve_button5: nerve_button5 {
 gpios = <&gpio0 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-label = "Nerve Button";
+label = "Nerve Button 5";
 };
 };
 aliases {
-nerve-button = &nerve_button;
+nerve-button1 = &nerve_button1;
+nerve-button2 = &nerve_button2;
+nerve-button3 = &nerve_button3;
+nerve-button4 = &nerve_button4;
+nerve-button5 = &nerve_button5;
 };
 };
+
