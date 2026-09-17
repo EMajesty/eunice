@@ -14,9 +14,12 @@ if [[ ! -f "$UF2" ]]; then
     exit 1
 fi
 
+if [[ -e "$UF2_DISK" ]]; then
+echo "Nerve already in bootloader."
+else
 if [[ ! -e "$SERIAL" ]]; then
-    echo "Nerve not found."
-    exit 1
+echo "Nerve not found."
+exit 1
 fi
 
 echo "Requesting bootloader..."
@@ -25,13 +28,14 @@ printf 'b' > "$SERIAL"
 
 echo "Waiting for UF2 bootloader..."
 for _ in {1..50}; do
-    [[ -e "$UF2_DISK" ]] && break
-    sleep 0.1
+[[ -e "$UF2_DISK" ]] && break
+sleep 0.1
 done
 
 if [[ ! -e "$UF2_DISK" ]]; then
-    echo "UF2 bootloader did not appear."
-    exit 1
+echo "UF2 bootloader did not appear."
+exit 1
+fi
 fi
 
 # Don't let Linux's FAT driver interfere with the synthetic UF2 disk.
@@ -44,5 +48,15 @@ sudo dd \
     bs=512 \
     conv=fsync \
     status=progress
+
+echo "Waiting for serial..."
+for _ in {1..50}; do
+[[ -e "$SERIAL" ]] && break
+sleep 0.1
+done
+
+if [[ -e "$SERIAL" ]]; then
+stty -F "$SERIAL" raw -echo
+fi
 
 echo "Flash complete."

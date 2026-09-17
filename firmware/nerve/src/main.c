@@ -1,9 +1,17 @@
 #include <hal/nrf_power.h>
+#include <inttypes.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/uart.h>
 #include <zephyr/kernel.h>
 #include <zephyr/sys/printk.h>
+
+struct nerve_button {
+    struct gpio_dt_spec gpio;
+    struct gpio_callback callback;
+    size_t index;
+    volatile uint32_t count;
+};
 
 static void enter_bootloader(void) {
     printk("Entering bootloader\n");
@@ -16,22 +24,39 @@ static void enter_bootloader(void) {
 
 static void button_pressed(const struct device *port, struct gpio_callback *cb,
                            gpio_port_pins_t pins) {
-    printk("button interrupt\n");
+    struct nerve_button *button =
+        CONTAINER_OF(cb, struct nerve_button, callback);
+    button->count++;
 }
 
 int main(void) {
     static const struct gpio_dt_spec led =
         GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
 
-    static const struct gpio_dt_spec buttons[] = {
-        GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button1), gpios),
-        GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button2), gpios),
-        GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button3), gpios),
-        GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button4), gpios),
-        GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button5), gpios),
+    static struct nerve_button buttons[] = {
+        {
+            .gpio = GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button1), gpios),
+            .index = 1,
+        },
+        {
+            .gpio = GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button2), gpios),
+            .index = 2,
+        },
+        {
+            .gpio = GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button3), gpios),
+            .index = 3,
+        },
+        {
+            .gpio = GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button4), gpios),
+            .index = 4,
+        },
+        {
+            .gpio = GPIO_DT_SPEC_GET(DT_ALIAS(nerve_button5), gpios),
+            .index = 5,
+        },
     };
 
-    static struct gpio_callback button_cbs[ARRAY_SIZE(buttons)];
+    // static struct gpio_callback button_cbs[ARRAY_SIZE(buttons)];
 
     static const struct device *console =
         DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
@@ -41,16 +66,18 @@ int main(void) {
     }
 
     for (size_t i = 0; i < ARRAY_SIZE(buttons); i++) {
-        if (!gpio_is_ready_dt(&buttons[i])) {
+        if (!gpio_is_ready_dt(&buttons[i].gpio)) {
             return 0;
         }
     }
 
     for (size_t i = 0; i < ARRAY_SIZE(buttons); i++) {
-        gpio_pin_configure_dt(&buttons[i], GPIO_INPUT);
-        gpio_init_callback(&button_cbs[i], button_pressed, BIT(buttons[i].pin));
-        gpio_add_callback_dt(&buttons[i], &button_cbs[i]);
-        gpio_pin_interrupt_configure_dt(&buttons[i], GPIO_INT_EDGE_TO_ACTIVE);
+        gpio_pin_configure_dt(&buttons[i].gpio, GPIO_INPUT);
+        gpio_init_callback(&buttons[i].callback, button_pressed,
+                           BIT(buttons[i].gpio.pin));
+        gpio_add_callback_dt(&buttons[i].gpio, &buttons[i].callback);
+        gpio_pin_interrupt_configure_dt(&buttons[i].gpio,
+                                        GPIO_INT_EDGE_TO_ACTIVE);
     }
 
     gpio_pin_configure_dt(&led, GPIO_OUTPUT_INACTIVE);
@@ -58,11 +85,21 @@ int main(void) {
     printk("nerve online\n");
 
     unsigned char c;
+    int64_t time = k_uptime_get();
+
     while (1) {
         if (uart_poll_in(console, &c) == 0) {
             if (c == 'b') {
                 enter_bootloader();
             }
+        }
+        int64_t elapsed = k_uptime_get() - time;
+        if (elapsed > 5000) {
+            for (size_t i = 0; i < ARRAY_SIZE(buttons); i++) {
+                printk("%zu=%" PRIu32 " ", i, buttons[i].count);
+            }
+            printk("\n");
+            time = k_uptime_get();
         }
 
         k_msleep(10);
